@@ -16,7 +16,7 @@ module AWeber
   #    lists.find_by_name("testlist")
   #    #=> #<AWeber::Resources::List @id=123, @name="testlist" ...>
   #
-  # +find_by_*+ methods will also return a Hash of entries if more than 
+  # +find_by_*+ methods will also return a Hash of entries if more than
   # one matches the criteria. The hash will be keyed by resource ID.
   #
   #    messages.find_by_total_opens(0)
@@ -73,6 +73,12 @@ module AWeber
         end
       end
 
+      if params.has_key?('tags')
+        if params['tags'].is_a?(Array)
+            params['tags'] = params['tags'].to_json
+        end
+      end
+
       response = client.post(path, params)
 
       if response.is_a? Net::HTTPCreated
@@ -123,7 +129,7 @@ module AWeber
     end
 
     def fetch_entry(id)
-      @klass.new(client, get(path).merge(:parent => self))
+      @klass.new(client, get("#{path}/#{id}").merge(:parent => self))
     end
 
     def fetch_next_group()

@@ -17,31 +17,31 @@ module AWeber
     class << self
       attr_accessor :writable_attrs
       attr_accessor :path
-      
+
       def basepath(path)
         @path = path
       end
-      
+
       # Works the same as +alias_method+, but for attributes created via
       # +attr*+ methods.
       #
       def alias_attribute(alias_, attribute)
         alias_method alias_, attribute
       end
-      
+
       # Defines an attribute that it either read only or writable.
-      # 
+      #
       # == Example:
-      # 
+      #
       #   # Read-only
       #   api_attr :name
-      # 
+      #
       #   # Writable
       #   api_attr :name, :writable => true
-      # 
+      #
       # If an attribute is writable it will be sent with the request when
       # +save+ is called.
-      # 
+      #
       def api_attr(attr_, opts={})
         if opts[:writable]
           attr_accessor attr_
@@ -51,12 +51,12 @@ module AWeber
           attr_reader attr_
         end
       end
-      
+
       def has_one(name)
         define_method(name) do
           ivar = instance_variable_get("@#{name}")
           return ivar if ivar
-          
+
           resource_link = instance_variable_get("@#{name}_link")
           klass         = AWeber.get_class(:"#{name}s")
           collection    = klass.new(client, client.get(resource_link))
@@ -64,7 +64,7 @@ module AWeber
         end
       end
 
-      # Creates a lazy loaded method which will retrieve and create a 
+      # Creates a lazy loaded method which will retrieve and create a
       # collection of +name+ of objects.
       #
       # @param [Symbol] name name of the collection method
@@ -100,7 +100,7 @@ module AWeber
     alias_attribute :etag, :http_etag
     alias_attribute :link, :self_link
     alias_attribute :resource_type, :resource_type_link
-    
+
     def_delegators :client, :get, :post, :put
 
     attr_reader :parent
@@ -115,15 +115,16 @@ module AWeber
     def delete
       client.delete(@self_link)
     end
-    
+
     def save
       body = writable_attrs.inject({}) do |body, attr_|
+        next body if attr_ == :tags && send(attr_) == nil
         body[attr_] = send(attr_)
         body
       end
       client.put(self_link, body)
     end
-    
+
     def writable_attrs
       self.class.writable_attrs ||= {}
     end
@@ -131,11 +132,11 @@ module AWeber
     def <=>(other)
       @id <=> other.id
     end
-    
+
     def path
       parent and "#{parent.path}/#{id}" or id.to_s
     end
-    
+
     def uri
       self_link.gsub(AWeber.api_url, '')
     end
