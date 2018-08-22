@@ -53,11 +53,15 @@ module AWeber
     def search(params={})
       if params.has_key?('custom_fields')
         if params['custom_fields'].is_a?(Hash)
-            params['custom_fields'] = params['custom_fields'].to_json
+          params['custom_fields'] = params['custom_fields'].to_json
         end
       end
-      params   = params.map { |k,v| "#{h(k)}=#{h(v)}" }.join("&")
-      uri      = "#{path}?ws.op=find&#{params}"
+
+      if params.has_key?('tags') && params['tags'].is_a?(Array)
+        params['tags'] = params['tags'].to_json
+      end
+
+      uri      = "#{path}?ws.op=find&#{params.to_query}"
       response = client.get(uri).merge(:parent => parent)
       response["total_size"] ||= response["entries"].size
 
