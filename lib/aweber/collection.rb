@@ -62,7 +62,11 @@ module AWeber
       end
 
       uri      = "#{path}?ws.op=find&#{params.to_query}"
-      response = client.get(uri).merge(:parent => parent)
+      response = client.get(uri)
+
+      return response if response.is_a?(Integer)
+
+      response.merge!(:parent => parent)
       response["total_size"] ||= response["entries"].size
 
       self.class.new(client, @klass, response)
