@@ -72,7 +72,7 @@ module AWeber
 
         self.class.new(client, @klass, response)
       else
-        raise UnknownRequestError, response['message'], caller
+        raise UnknownRequestError, response.inspect, caller
       end
     end
 
