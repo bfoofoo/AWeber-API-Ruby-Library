@@ -66,10 +66,14 @@ module AWeber
 
       return response if response.is_a?(Integer)
 
-      response.merge!(:parent => parent)
-      response["total_size"] ||= response["entries"].size
+      if response['entries']
+        response.merge!(:parent => parent)
+        response["total_size"] ||= response["entries"].size
 
-      self.class.new(client, @klass, response)
+        self.class.new(client, @klass, response)
+      else
+        raise UnknownRequestError, response['message'], caller
+      end
     end
 
     def create(attrs={})
