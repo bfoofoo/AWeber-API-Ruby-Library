@@ -63,6 +63,7 @@ module AWeber
   class RateLimitError < StandardError; end
   class ForbiddenRequestError < StandardError; end
   class CreationError < StandardError; end
+  class ServiceUnavailableError < StandardError; end
 end
 
 $LOAD_PATH << File.dirname(__FILE__) unless $LOAD_PATH.include?(File.dirname(__FILE__))

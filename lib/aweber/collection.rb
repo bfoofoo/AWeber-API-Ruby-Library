@@ -71,6 +71,8 @@ module AWeber
         response["total_size"] ||= response["entries"].size
 
         self.class.new(client, @klass, response)
+      elsif response.dig('error', 'status') == 503
+        raise ServiceUnavailableError, response.dig('error', 'message'), caller
       else
         raise UnknownRequestError, response.dig('error', 'message') || response.inspect, caller
       end
