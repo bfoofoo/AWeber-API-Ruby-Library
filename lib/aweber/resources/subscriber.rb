@@ -52,7 +52,10 @@ module AWeber
       def activity(params = {})
         params   = params.to_query
         uri      = "#{path}?ws.op=getActivity&#{params}"
-        client.get(uri)
+        response = client.get(uri).merge(parent: self)
+        response["total_size"] ||= response["entries"].size
+
+        Collection.new(client, Activity, response)
       end
 
     private

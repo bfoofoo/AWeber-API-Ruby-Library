@@ -1,4 +1,5 @@
 require "aweber/resources/account"
+require "aweber/resources/activity"
 require "aweber/resources/broadcast"
 require "aweber/resources/click"
 require "aweber/resources/followup"
