@@ -49,6 +49,12 @@ module AWeber
         move_to(list)
       end
 
+      def activity(params = {})
+        params   = params.to_query
+        uri      = "#{path}?ws.op=getActivity&#{params}"
+        client.get(uri)
+      end
+
     private
 
       def move_to(list)
