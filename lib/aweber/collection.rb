@@ -121,6 +121,15 @@ module AWeber
       (1..@total_size).each { |n| yield get_entry(n) }
     end
 
+    def each_page
+      current_page = self
+      yield(current_page)
+      while current_page.next_collection_link
+        current_page = self.class.new(client, @klass, get(current_page.next_collection_link))
+        yield(current_page)
+      end
+    end
+
     def inspect
       "#<AW::Collection(#{@klass.to_s}) size=\"#{size}\">"
     end
