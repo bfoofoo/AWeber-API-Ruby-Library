@@ -125,7 +125,16 @@ module AWeber
       current_page = self
       yield(current_page)
       while current_page.next_collection_link
-        current_page = self.class.new(client, @klass, get(current_page.next_collection_link))
+        begin
+          retries = 0
+          current_page = self.class.new(client, @klass, get(current_page.next_collection_link))
+        rescue AWeber::UnknownRequestError => e
+          retries += 1
+          retry if e.to_s == 'Invalid/used nonce' && retries < 2
+        rescue AWeber::ServiceUnavailableError
+          retries += 1
+          retry if retries < 2
+        end
         yield(current_page)
       end
     end
