@@ -53,7 +53,6 @@ module AWeber
         params   = params.to_query
         uri      = "#{path}?ws.op=getActivity&#{params}"
         response = client.get(uri).merge(parent: self)
-        response["total_size"] ||= response["entries"].size
 
         Collection.new(client, Activity, response)
       end
