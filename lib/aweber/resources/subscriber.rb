@@ -51,7 +51,7 @@ module AWeber
 
       def activity(params = {})
         params   = params.to_query
-        uri      = "#{path}?ws.op=getActivity&#{params}"
+        uri      = "#{self_link}?ws.op=getActivity&#{params}"
         response = client.get(uri).merge(parent: self)
 
         Collection.new(client, Activity, response)
