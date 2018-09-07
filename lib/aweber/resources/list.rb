@@ -26,13 +26,10 @@ module AWeber
         @followups  = nil
         @broadcasts = nil
       end
-      
-      def broadcasts
-        return @broadcasts if @broadcasts
 
-        @broadcasts = AWeber::Collection.new(client, Campaign, :parent => self)
-        @broadcasts.entries = Hash[campaigns.select { |id, c| c.is_broadcast? }]
-        @broadcasts
+      def broadcasts
+        response = client.get("#{uri}/broadcasts").merge(parent: self)
+        AWeber::Collection.new(client, Broadcast, response)
       end
       
       def followups
