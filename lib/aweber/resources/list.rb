@@ -27,8 +27,8 @@ module AWeber
         @broadcasts = nil
       end
 
-      def broadcasts
-        response = client.get("#{uri}/broadcasts").merge(parent: self)
+      def broadcasts(status)
+        response = client.get("#{uri}/broadcasts?status=#{status}").merge(parent: self)
         AWeber::Collection.new(client, Broadcast, response)
       end
       
