@@ -39,6 +39,14 @@ module AWeber
         @followups.entries = Hash[campaigns.select { |id, c| c.is_followup? }]
         @followups
       end
+
+      def find(params = {})
+        uri      = "#{path}/subscribers?ws.op=find&#{params.to_query}"
+        response = client.get(uri).merge(:parent => self)
+        response["total_size"] ||= response["entries"].size
+
+        Collection.new(client, Subscriber, response)
+      end
     end
   end
 end
