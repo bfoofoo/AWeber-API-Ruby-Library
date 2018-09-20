@@ -3,28 +3,22 @@ module AWeber
     class Broadcast < Resource
       basepath "/broadcasts"
       
-      api_attr :click_tracking_enabled
-      api_attr :content_type
-      api_attr :is_archived
-      api_attr :scheduled_at
       api_attr :sent_at
-      api_attr :spam_assassin_score
+      api_attr :body_text
+      api_attr :body_html
+      api_attr :broadcast_id
+      api_attr :archive_link
+      api_attr :notify_on_send
+      api_attr :include_lists
+      api_attr :exclude_lists
+      api_attr :stats
+      api_attr :scheduled_for
+      api_attr :status
+      api_attr :self_link
       api_attr :subject
-      api_attr :total_clicks
-      api_attr :total_opens
-      api_attr :total_sent
-      api_attr :total_spam_complaints
-      api_attr :total_undelivered
-      api_attr :total_unsubscribes
-      api_attr :twitter_account_link
-
-      api_attr :stats_collection_link
-      api_attr :links_collection_link
-      api_attr :messages_collection_link
-
-      has_many :stats
-      has_many :links
-      has_many :messages
+      api_attr :is_archived
+      api_attr :click_tracking_enabled
+      api_attr :created_at
 
       alias_attribute :is_archived?, :is_archived
       alias_attribute :is_click_tracking_enabled?, :click_tracking_enabled

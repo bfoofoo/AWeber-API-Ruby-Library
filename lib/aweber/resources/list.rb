@@ -30,7 +30,7 @@ module AWeber
       def broadcasts(status)
         return @broadcasts if @broadcasts
 
-        response = client.get("#{uri}/broadcasts?status=#{CGI.escape(status)}").merge(parent: self)
+        response = client.get("#{self_link}/broadcasts?status=#{CGI.escape(status)}").merge(parent: self)
         Collection.new(client, Broadcast, response)
       end
       
