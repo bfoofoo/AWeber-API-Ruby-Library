@@ -33,6 +33,7 @@ module AWeber
     attr_reader   :resource_type_link
     attr_reader   :total_size
     attr_reader   :parent
+    attr_reader   :collection
 
     alias_method :size,   :total_size
     alias_method :length, :total_size
@@ -48,6 +49,7 @@ module AWeber
       @entries = {}
       create_entries(data["entries"]) if data.include?("entries")
       @_entries = @entries.to_a
+      @collection = data.include?('entries') ? data['entries'] : []
     end
 
     def search(params={})
