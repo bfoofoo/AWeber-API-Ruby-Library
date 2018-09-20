@@ -150,8 +150,12 @@ module AWeber
   private
 
     def create_entries(entries)
-      entries.each do |entry|
-        @entries[entry["id"]] = @klass.new(client, entry.merge(:parent => self))
+      entries.each_with_index do |entry, index|
+        if entry.has_key?('id')
+          @entries[entry["id"]] = @klass.new(client, entry.merge(:parent => self))
+        else
+          @entries[index] = @klass.new(client, entry.merge(:parent => self))
+        end
       end
     end
 
