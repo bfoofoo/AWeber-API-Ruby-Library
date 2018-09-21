@@ -28,8 +28,10 @@ module AWeber
       end
 
       def broadcasts(status)
-        response = client.get("#{uri}/broadcasts?status=#{status}").merge(parent: self)
-        AWeber::Collection.new(client, Broadcast, response)
+        return @broadcasts if @broadcasts
+
+        response = client.get("#{self_link}/broadcasts?status=#{CGI.escape(status)}").merge(parent: self)
+        Collection.new(client, Broadcast, response)
       end
 
       def search_broadcast_campaigns
@@ -45,14 +47,6 @@ module AWeber
         @followups = AWeber::Collection.new(client, Campaign, :parent => self)
         @followups.entries = Hash[campaigns.select { |id, c| c.is_followup? }]
         @followups
-      end
-
-      def find(params = {})
-        uri      = "#{path}/subscribers?ws.op=find&#{params.to_query}"
-        response = client.get(uri).merge(:parent => self)
-        response["total_size"] ||= response["entries"].size
-
-        Collection.new(client, Subscriber, response)
       end
     end
   end
