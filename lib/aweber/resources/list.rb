@@ -31,7 +31,14 @@ module AWeber
         response = client.get("#{uri}/broadcasts?status=#{status}").merge(parent: self)
         AWeber::Collection.new(client, Broadcast, response)
       end
-      
+
+      def search_broadcast_campaigns
+        return @broadcast_campaigns if @broadcast_campaigns
+
+        response = client.get("#{self_link}/campaigns?campaign_type=b").merge(parent: self)
+        Collection.new(client, Campaign, response)
+      end
+
       def followups
         return @followups if @followups
 
