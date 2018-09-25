@@ -41,6 +41,16 @@ module AWeber
         Collection.new(client, Campaign, response)
       end
 
+      def find_subscribers(attrs={})
+        params = attrs.merge("ws.op" => "find")
+
+        uri      = "#{self_link}?w#{params.to_query}"
+        response = client.get(uri).merge(:parent => self)
+        response["total_size"] ||= response["entries"].size
+
+        Collection.new(client, Subscriber, response)
+      end
+
       def followups
         return @followups if @followups
 
