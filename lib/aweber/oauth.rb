@@ -2,7 +2,7 @@ module AWeber
   class OAuth
     extend Forwardable
 
-    def_delegators :access_token, :get, :post, :put, :delete
+    def_delegators :access_token, :get, :post, :put, :delete, :patch
 
     def initialize(consumer_token, consumer_secret, options={})
       @consumer_token  = consumer_token

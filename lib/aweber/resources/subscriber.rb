@@ -57,6 +57,10 @@ module AWeber
         Collection.new(client, Activity, response)
       end
 
+      def update(attrs={})
+        client.patch(self_link, attrs)
+      end
+
     private
 
       def move_to(list)

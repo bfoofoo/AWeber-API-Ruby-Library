@@ -44,7 +44,7 @@ module AWeber
       def find_subscribers(attrs={})
         params = attrs.merge("ws.op" => "find")
 
-        uri      = "#{self_link}?w#{params.to_query}"
+        uri      = "#{self_link}/subscribers?#{params.to_query}"
         response = client.get(uri).merge(:parent => self)
         response["total_size"] ||= response["entries"].size
 
