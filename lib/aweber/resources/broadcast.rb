@@ -22,6 +22,16 @@ module AWeber
 
       alias_attribute :is_archived?, :is_archived
       alias_attribute :is_click_tracking_enabled?, :click_tracking_enabled
+
+      def id
+        matches = self_link.match(/broadcasts\/(\d+)\Z/)
+        matches[1] if matches
+      end
+
+      def detailed
+        response = client.get(self_link)
+        Broadcast.new(client, response)
+      end
     end
   end
 end

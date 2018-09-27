@@ -34,6 +34,11 @@ module AWeber
         Collection.new(client, Broadcast, response)
       end
 
+      def broadcast(id)
+        response = client.get("#{self_link}/broadcasts/#{CGI.escape(id)}").merge(parent: self)
+        Broadcast.new(client, response)
+      end
+
       def search_broadcast_campaigns
         return @broadcast_campaigns if @broadcast_campaigns
 
