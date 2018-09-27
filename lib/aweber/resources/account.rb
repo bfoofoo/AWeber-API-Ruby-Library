@@ -13,9 +13,14 @@ module AWeber
       alias_attribute :uri, :self_link
 
       def find_subscribers(params={})
-        params   = params.map { |k,v| "#{h(k)}=#{h(v)}" }.join("&")
-        uri      = "#{path}?ws.op=findSubscribers&#{params}"
+        if params.has_key?('custom_fields')
+          if params['custom_fields'].is_a?(Hash)
+            params['custom_fields'] = params['custom_fields'].to_json
+          end
+        end
+        uri      = "#{path}?ws.op=findSubscribers&#{params.to_query}"
         response = client.get(uri).merge(:parent => self)
+        raise AWeber::NotFoundError unless response['entries']
         response["total_size"] ||= response["entries"].size
 
         Collection.new(client, Subscriber, response)

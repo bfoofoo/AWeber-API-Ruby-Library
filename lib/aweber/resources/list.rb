@@ -48,9 +48,15 @@ module AWeber
 
       def find_subscribers(attrs={})
         params = attrs.merge("ws.op" => "find")
+        if params.has_key?('custom_fields')
+          if params['custom_fields'].is_a?(Hash)
+            params['custom_fields'] = params['custom_fields'].to_json
+          end
+        end
 
         uri      = "#{self_link}/subscribers?#{params.to_query}"
         response = client.get(uri).merge(:parent => self)
+        raise AWeber::NotFoundError unless response['entries']
         response["total_size"] ||= response["entries"].size
 
         Collection.new(client, Subscriber, response)
