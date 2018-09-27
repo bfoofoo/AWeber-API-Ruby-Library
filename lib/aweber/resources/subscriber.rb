@@ -57,6 +57,11 @@ module AWeber
         Collection.new(client, Activity, response)
       end
 
+      def list_id
+        matches = self_link.match(/lists\/(\d+)/)
+        matches[1] if matches
+      end
+
       def update(attrs={})
         client.patch(self_link, attrs)
       end
