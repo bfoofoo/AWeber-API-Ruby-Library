@@ -29,7 +29,7 @@ module AWeber
       end
 
       def list_ids
-        include_lists.map do |list|
+        include_lists.to_a.map do |list|
           matches = list.match(/lists\/(\d+)\Z/)
           matches[1] if matches
         end.compact
