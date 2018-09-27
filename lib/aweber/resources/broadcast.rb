@@ -28,6 +28,13 @@ module AWeber
         matches[1] if matches
       end
 
+      def list_ids
+        include_lists.map do |list|
+          matches = list.match(/lists\/(\d+)\Z/)
+          matches[1] if matches
+        end.compact
+      end
+
       def detailed
         response = client.get(self_link)
         Broadcast.new(client, response)
